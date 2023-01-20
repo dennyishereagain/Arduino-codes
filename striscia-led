@@ -1,0 +1,44 @@
+#include <IRremoteInt.h>
+#include <IRremote.h>
+int receiver = 11;
+int redPin = 12;
+int greenPin = 13;
+int bluePin = 8;
+IRrecv irrecv(receiver);
+decode_results results;
+void setup() {
+  Serial.begin(9600);
+  irrecv.enableIRIn();
+  pinMode(redPin, OUTPUT);
+  pinMode(greenPin, OUTPUT);
+  pinMode(bluePin, OUTPUT);
+  digitalWrite(9, LOW);
+  digitalWrite(10, LOW);
+}
+void loop() {
+if (irrecv.decode(&results))
+  { Serial.println(results.value, HEX);
+    irrecv.resume();}
+switch (results.value) {
+  case 0xFF9A65:
+  { digitalWrite(bluePin, 100);
+    digitalWrite(redPin, 100);
+    digitalWrite(greenPin, 0);
+    break; }
+  case 0xFF1AE5:
+  { digitalWrite(bluePin, 100);
+    digitalWrite(redPin, 0);
+    digitalWrite(greenPin, 100);
+    break; }
+  case 0xFFA25D:
+  { digitalWrite(bluePin, 0);
+    digitalWrite(redPin, 100);
+    digitalWrite(greenPin, 100);
+    break; }
+  case 0xF63C8657:
+  { digitalWrite(bluePin, 0);
+    digitalWrite(redPin, 0);
+    digitalWrite(greenPin, 100);
+    break; }
+ }
+}
